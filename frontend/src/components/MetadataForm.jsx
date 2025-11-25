@@ -50,8 +50,8 @@ export default function MetadataForm({ meta, setMeta }) {
                 <label>Featured image URL</label>
                 {/* Image URL input */}
                 <input
-                    value={meta.featured_image}
-                    onChange={e => update("featured_image", e.target.value)}
+                    value={meta.image}
+                    onChange={e => update("image", e.target.value)}
                 />
 
                 <label>Tagovi (odvojeni zarezima)</label>

@@ -13,7 +13,7 @@ function App() {
         description: "",
         date: new Date().toISOString().slice(0, 10),
         slug: "",
-        featured_image: "",
+        image: "",
         tags: "",
         categories: ""
     });

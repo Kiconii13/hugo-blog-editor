@@ -14,7 +14,7 @@ date: "${meta.date}"
 draft: false
 tags: [${tags}]
 categories: [${categories}]
-featured_image: "${meta.featured_image}"
+image: "${meta.image}"
 ---
 `;
 }

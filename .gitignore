@@ -1,0 +1,82 @@
+# ==============================
+# Node / Frontend
+# ==============================
+node_modules/
+.pnp
+.pnp.js
+/build/
+/dist/
+/coverage/
+
+# ==============================
+# Backend / Python
+# ==============================
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+backend/.env
+# Ignore generated content if you don't want it in Git
+backend/content/posts/
+backend/content/blogs/
+
+# ==============================
+# Hugo / Static Site Generator
+# ==============================
+/public/
+/resources/
+.hugo_build.lock
+
+# ==============================
+# Env files
+# ==============================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ==============================
+# IDEs and editors
+# ==============================
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# ==============================
+# OS generated files
+# ==============================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+
+# ==============================
+# Logs
+# ==============================
+*.log
+logs/
+*.log.*
+
+# ==============================
+# Temporary files
+# ==============================
+*.tmp
+*.temp
+*.swp
+*~
+.#*
+.nfs*
+
+# ==============================
+# Build artifacts
+# ==============================
+/out/
+/next/

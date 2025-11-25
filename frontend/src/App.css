@@ -1,0 +1,166 @@
+/* ==============================
+   General layout - Dark Theme
+============================== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background: #1e1e2f;      /* main dark background */
+  color: #f0f0f0;           /* default light text */
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+  color: #f0f0f0;
+}
+
+.app-grid {
+  display: flex;            
+  flex-direction: column;
+  gap: 20px;                /* space between panels */
+  max-width: 1200px;
+  margin: 40px auto;        /* center on page */
+  padding: 20px;
+  background: #2a2a3d;      /* container background */
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* ==============================
+   Panels
+============================== */
+.meta-panel, .editor-panel, .preview-panel {
+  min-height: 200px;
+  background: #2f2f45;      /* panel background */
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #444;
+}
+
+/* ==============================
+   Meta panel layout
+============================== */
+.meta-panel {
+  display: flex;
+  flex-wrap: wrap;          /* responsive row wrapping */
+  gap: 20px;
+}
+
+.meta-panel > div {
+  flex: 1 1 200px;          /* each section gets equal space */
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-panel h2 {
+  width: 100%;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+}
+
+.meta-panel label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #ccc;              /* softer label color */
+}
+
+.meta-panel input,
+.meta-panel select,
+.meta-panel textarea {
+  background: #1f1f34;      /* dark input background */
+  color: #f0f0f0;
+  border: 1px solid #555;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.meta-panel input:focus,
+.meta-panel textarea:focus,
+.meta-panel select:focus {
+  outline: none;
+  border-color: #6c9cff;    /* blue focus border */
+  box-shadow: 0 0 0 3px rgba(108,156,255,0.2);
+}
+
+.meta-panel textarea {
+  height: 4.6rem;
+  resize: none;             /* fixed height */
+}
+
+/* ==============================
+   Markdown Editor Dark Theme
+============================== */
+.editor-panel .CodeMirror,
+.editor-panel .CodeMirror-scroll {
+  background: #1e1e2f !important;  /* dark editor */
+  color: #f0f0f0 !important;
+}
+
+.toolbar button {
+  background: #3a3a5a;
+  color: #f0f0f0;
+  border: 1px solid #555;
+}
+
+body .editor-toolbar a {
+  color: #f0f0f0 !important; /* dark theme toolbar icons */
+}
+
+body .editor-toolbar a:hover {
+  color: #2c3e50 !important; /* hover color */
+}
+
+.toolbar button:hover {
+  background: #505073;
+}
+
+/* ==============================
+   Preview box
+============================== */
+.preview-box {
+  border: 1px solid #555;
+  background: #1e1e2f;
+  color: #f0f0f0;
+  padding: 15px;
+  min-height: 300px;
+  max-height: 70vh;         /* scrollable preview */
+  overflow-y: auto;
+  border-radius: 10px;
+}
+
+/* ==============================
+   Save button
+============================== */
+.save-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #6c9cff;      /* primary color */
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.25s ease, transform 0.15s ease;
+}
+
+.save-button:hover {
+  background: #5176d1;      /* darker hover */
+}
+
+.save-button:active {
+  transform: scale(0.97);   /* click feedback */
+}
+
+/* ==============================
+   Footer
+============================== */
+footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 15px 0;
+  color: #888;              /* muted text */
+  font-size: 14px;
+}

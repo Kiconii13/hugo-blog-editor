@@ -73,7 +73,7 @@ function App() {
 
             {/* Footer */}
             <footer>
-                &copy; {new Date().getFullYear()} <a href="https://github.com/Kiconii13" target="_blank">Kiconii13</a> All rights reserved.
+            &copy; {new Date().getFullYear()} <a href="https://github.com/Kiconii13" target="_blank" rel="noreferrer">Kiconii13</a> All rights reserved.
             </footer>
 
         </div>

@@ -5,7 +5,7 @@ import Preview from "./components/Preview";
 import slugify from "./utils/slugify";
 import generateFrontMatter from "./utils/generateFrontMatter";
 
-// Jednostavna login komponenta
+// Minimal login component
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -14,11 +14,12 @@ const Login = ({ onLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Env variables (set locally or in Netlify)
     const ADMIN_USER = process.env.REACT_APP_ADMIN_USER;
     const ADMIN_PASS = process.env.REACT_APP_ADMIN_PASS;
 
     if (username === ADMIN_USER && password === ADMIN_PASS) {
-      onLogin(); // otključava editor
+      onLogin(); // unlock editor
     } else {
       setError("Invalid credentials");
     }
@@ -50,7 +51,7 @@ const Login = ({ onLogin }) => {
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
-  // Stores all metadata fields for the post
+  // Metadata state
   const [meta, setMeta] = useState({
     title: "",
     description: "",
@@ -61,62 +62,54 @@ function App() {
     categories: ""
   });
 
-  // Stores the markdown content
+  // Markdown content
   const [content, setContent] = useState("");
 
-  // Automatically regenerate slug when the title changes
+  // Update slug automatically when title changes
   useEffect(() => {
     setMeta(prev => ({ ...prev, slug: slugify(prev.title) }));
   }, [meta.title]);
 
-  // Saves the post to the backend
+  // Save post to backend
   const handleSave = async () => {
     const frontmatter = generateFrontMatter(meta);
-
-    const payload = {
-      slug: meta.slug,
-      front: frontmatter,
-      content: content
-    };
+    const payload = { slug: meta.slug, front: frontmatter, content };
 
     const apiUrl = process.env.REACT_APP_API_URL;
 
-    await fetch(`${apiUrl}/save`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
+    try {
+      const res = await fetch(`${apiUrl}/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
 
-    alert("Sačuvano!");
+      if (res.ok) {
+        alert("Saved!");
+      } else {
+        const data = await res.json();
+        alert("Error: " + (data.error || "Unknown error"));
+      }
+    } catch (err) {
+      alert("Network error: " + err.message);
+    }
   };
 
-  if (!loggedIn) {
-    return <Login onLogin={() => setLoggedIn(true)} />;
-  }
+  // If not logged in, show login form
+  if (!loggedIn) return <Login onLogin={() => setLoggedIn(true)} />;
 
   return (
     <div className="app-grid">
       <h1>HUGO BLOG EDITOR</h1>
 
-      {/* Metadata inputs (title, description, etc.) */}
       <MetadataForm meta={meta} setMeta={setMeta} />
-
-      {/* Markdown editor component */}
-      <MarkdownEditor 
-        meta={meta}
-        content={content}
-        setContent={setContent}
-      />
-
-      {/* Live preview of the markdown */}
+      <MarkdownEditor meta={meta} content={content} setContent={setContent} />
       <Preview content={content} />
 
-      {/* Save button */}
       <button className="save-button" onClick={handleSave}>
-        Sačuvaj
+        Save
       </button>
 
-      {/* Footer */}
       <footer>
         &copy; {new Date().getFullYear()} <a href="https://github.com/Kiconii13" target="_blank" rel="noreferrer">Kiconii13</a> All rights reserved.
       </footer>

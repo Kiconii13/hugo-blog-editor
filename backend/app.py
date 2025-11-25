@@ -109,6 +109,20 @@ def save_post():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+
+    ADMIN_USER = os.environ.get("ADMIN_USER")
+    ADMIN_PASS = os.environ.get("ADMIN_PASS")
+
+    if username == ADMIN_USER and password == ADMIN_PASS:
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False, "error": "Invalid credentials"}), 401
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 

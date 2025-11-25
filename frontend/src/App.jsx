@@ -36,10 +36,12 @@ function App() {
             content: content
         };
 
-        await fetch("http://localhost:5000/save", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+        const apiUrl = process.env.REACT_APP_API_URL;
+
+        await fetch(`${apiUrl}/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postData)
         });
 
         alert("Sačuvano!");

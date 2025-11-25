@@ -71,29 +71,32 @@ function App() {
   }, [meta.title]);
 
   // Save post to backend
-  const handleSave = async () => {
-    const frontmatter = generateFrontMatter(meta);
-    const payload = { slug: meta.slug, front: frontmatter, content };
+ const handleSave = async () => {
+  const frontmatter = generateFrontMatter(meta);
 
-    const apiUrl = process.env.REACT_APP_API_URL;
-
-    try {
-      const res = await fetch(`${apiUrl}/save`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      if (res.ok) {
-        alert("Saved!");
-      } else {
-        const data = await res.json();
-        alert("Error: " + (data.error || "Unknown error"));
-      }
-    } catch (err) {
-      alert("Network error: " + err.message);
-    }
+  const payload = {
+    slug: meta.slug,
+    front: frontmatter,
+    content: content,
+    image: meta.image
   };
+
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  const res = await fetch(`${apiUrl}/save`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (res.ok) {
+    alert("Sačuvano!");
+  } else {
+    const err = await res.json();
+    alert("Error: " + (err.error || "Unknown error"));
+  }
+};
+
 
   // If not logged in, show login form
   if (!loggedIn) return <Login onLogin={() => setLoggedIn(true)} />;

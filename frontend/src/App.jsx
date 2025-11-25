@@ -5,23 +5,32 @@ import Preview from "./components/Preview";
 import slugify from "./utils/slugify";
 import generateFrontMatter from "./utils/generateFrontMatter";
 
-// Minimal login component
+// Login component that talks to backend
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const apiUrl = process.env.REACT_APP_API_URL;
 
-    // Env variables (set locally or in Netlify)
-    const ADMIN_USER = process.env.REACT_APP_ADMIN_USER;
-    const ADMIN_PASS = process.env.REACT_APP_ADMIN_PASS;
+    try {
+      const res = await fetch(`${apiUrl}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
 
-    if (username === ADMIN_USER && password === ADMIN_PASS) {
-      onLogin(); // unlock editor
-    } else {
-      setError("Invalid credentials");
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        onLogin(); // unlock editor
+      } else {
+        setError(data.error || "Login failed");
+      }
+    } catch (err) {
+      setError("Failed to connect to server");
     }
   };
 
@@ -67,38 +76,41 @@ function App() {
 
   // Update slug automatically when title changes
   useEffect(() => {
-    setMeta(prev => ({ ...prev, slug: slugify(prev.title) }));
+    setMeta((prev) => ({ ...prev, slug: slugify(prev.title) }));
   }, [meta.title]);
 
   // Save post to backend
- const handleSave = async () => {
-  const frontmatter = generateFrontMatter(meta);
+  const handleSave = async () => {
+    const frontmatter = generateFrontMatter(meta);
 
-  const payload = {
-    slug: meta.slug,
-    front: frontmatter,
-    content: content,
-    image: meta.image
+    const payload = {
+      slug: meta.slug,
+      front: frontmatter,
+      content: content,
+      image: meta.image // Base64 image from MetadataForm
+    };
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+
+    try {
+      const res = await fetch(`${apiUrl}/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        alert("Saved successfully!");
+      } else {
+        const err = await res.json();
+        alert("Error: " + (err.error || "Unknown error"));
+      }
+    } catch (err) {
+      alert("Failed to connect to server");
+    }
   };
 
-  const apiUrl = process.env.REACT_APP_API_URL;
-
-  const res = await fetch(`${apiUrl}/save`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-
-  if (res.ok) {
-    alert("Sačuvano!");
-  } else {
-    const err = await res.json();
-    alert("Error: " + (err.error || "Unknown error"));
-  }
-};
-
-
-  // If not logged in, show login form
+  // Show login form if not logged in
   if (!loggedIn) return <Login onLogin={() => setLoggedIn(true)} />;
 
   return (
@@ -114,7 +126,11 @@ function App() {
       </button>
 
       <footer>
-        &copy; {new Date().getFullYear()} <a href="https://github.com/Kiconii13" target="_blank" rel="noreferrer">Kiconii13</a> All rights reserved.
+        &copy; {new Date().getFullYear()}{" "}
+        <a href="https://github.com/Kiconii13" target="_blank" rel="noreferrer">
+          Kiconii13
+        </a>{" "}
+        All rights reserved.
       </footer>
     </div>
   );

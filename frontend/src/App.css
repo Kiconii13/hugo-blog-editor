@@ -74,6 +74,7 @@ h1 {
   padding: 8px 10px;
   border-radius: 6px;
   font-size: 14px;
+  caret-color: #ffffff;
 }
 
 .meta-panel input:focus,
@@ -87,6 +88,10 @@ h1 {
 .meta-panel textarea {
   height: 4.6rem;
   resize: none;             /* fixed height */
+}
+
+.CodeMirror-cursor {
+  border-left: 2px solid #ffffff !important; /* white cursor */
 }
 
 /* ==============================
@@ -163,4 +168,78 @@ footer {
   padding: 15px 0;
   color: #888;              /* muted text */
   font-size: 14px;
+}
+
+
+/* ==============================
+   Login Form - Dark Theme
+============================== */
+.login-container {
+  max-width: 400px;
+  margin: 80px auto;       /* centrirano vertikalno i horizontalno */
+  padding: 30px;
+  background: #2a2a3d;     /* ista nijansa kao glavni container */
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  color: #f0f0f0;
+  font-family: 'Inter', sans-serif;
+}
+
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 24px;
+  color: #f0f0f0;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-container input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: #1f1f34;
+  color: #f0f0f0;
+  font-size: 14px;
+  caret-color: #ffffff; /* bele kursor */
+}
+
+.login-container input:focus {
+  outline: none;
+  border-color: #6c9cff;
+  box-shadow: 0 0 0 3px rgba(108,156,255,0.2);
+}
+
+.login-container button {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #6c9cff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.15s ease;
+}
+
+.login-container button:hover {
+  background: #5176d1;
+}
+
+.login-container button:active {
+  transform: scale(0.97);
+}
+
+.login-container p {
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+.login-container p[style] {
+  color: #ff6b6b; /* error messages in red */
 }

@@ -54,6 +54,7 @@ def save_post():
     """
     Saves a markdown post and optional PNG image.
     The image is uploaded to static/images/blogs in the repo.
+    The Markdown front matter contains the image path, not Base64.
     """
     try:
         data = request.get_json()
@@ -66,13 +67,12 @@ def save_post():
             return jsonify({"error": "Missing data"}), 400
 
         # Save image if exists
-        image_url_markdown = ""
         if image_base64:
             if not image_base64.startswith("data:image/png;base64,"):
                 return jsonify({"error": "Only PNG images are allowed"}), 400
             header, encoded = image_base64.split(",", 1)
             image_bytes = base64.b64decode(encoded)
-            
+
             # Local save
             local_image_path = os.path.join(IMAGES_DIR, f"{slug}.png")
             with open(local_image_path, "wb") as f:
@@ -80,15 +80,29 @@ def save_post():
 
             # Upload to GitHub
             github_image_path = f"static/images/blogs/{slug}.png"
-            success, resp = github_put_file(github_image_path, image_bytes, f"Add image {slug}", is_binary=True)
+            success, resp = github_put_file(
+                github_image_path,
+                image_bytes,
+                f"Add image {slug}",
+                is_binary=True
+            )
             if not success:
                 return jsonify({"error": "Failed to upload image to GitHub", "github_response": resp}), 500
 
-            # Markdown link to image
-            image_url_markdown = f"![{slug}](/static/images/blogs/{slug}.png)\n\n"
+        # Update front matter to include image path
+        image_field = f'image: "/images/blogs/{slug}.png"' if image_base64 else 'image: ""'
+        front_lines = front.splitlines()
+        # Remove any existing image line
+        front_lines = [line for line in front_lines if not line.startswith("image:")]
+        # Insert new image line before closing '---'
+        for i, line in enumerate(front_lines):
+            if line.strip() == "---" and i != 0:
+                front_lines.insert(i, image_field)
+                break
+        front_with_image = "\n".join(front_lines)
 
-        # Combine front matter, image link, and markdown content
-        full_content = front + "\n\n" + image_url_markdown + content
+        # Combine front matter and content
+        full_content = front_with_image + "\n\n" + content
 
         # Save markdown locally
         local_md_path = os.path.join(LOCAL_SAVE_DIR, f"{slug}.md")
@@ -97,7 +111,11 @@ def save_post():
 
         # Upload markdown to GitHub
         github_md_path = f"{FOLDER_PATH}/{slug}.md"
-        success, resp = github_put_file(github_md_path, full_content, f"Add/Update post {slug}")
+        success, resp = github_put_file(
+            github_md_path,
+            full_content,
+            f"Add/Update post {slug}"
+        )
         if not success:
             return jsonify({"error": "Failed to upload markdown to GitHub", "github_response": resp}), 500
 

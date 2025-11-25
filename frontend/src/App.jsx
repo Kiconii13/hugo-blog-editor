@@ -28,24 +28,25 @@ function App() {
 
     // Saves the post to the backend
     const handleSave = async () => {
-        const frontmatter = generateFrontMatter(meta);
+    const frontmatter = generateFrontMatter(meta);
 
-        const payload = {
-            slug: meta.slug,
-            front: frontmatter,
-            content: content
-        };
+    const payload = {
+        slug: meta.slug,
+        front: frontmatter,
+        content: content
+    };
 
-        const apiUrl = process.env.REACT_APP_API_URL;
+    const apiUrl = process.env.REACT_APP_API_URL;
 
-        await fetch(`${apiUrl}/save`, {
+    await fetch(`${apiUrl}/save`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(postData)
-        });
+        body: JSON.stringify(payload) // <-- ovde koristimo payload
+    });
 
-        alert("Sačuvano!");
-    };
+    alert("Sačuvano!");
+};
+
 
     return (
         <div className="app-grid">
